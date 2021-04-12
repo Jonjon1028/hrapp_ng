@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "hrapp",
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "css"
+    }
+  },
+  "projects": {
+    "hrapp": {
+      "projectType": "application",
+      "root": "apps/hrapp",
+      "sourceRoot": "apps/hrapp/src",
+      "prefix": "hrapp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/hrapp",
+            "index": "apps/hrapp/src/index.html",
+            "main": "apps/hrapp/src/main.ts",
+            "polyfills": "apps/hrapp/src/polyfills.ts",
+            "tsConfig": "apps/hrapp/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/hrapp/src/favicon.ico", "apps/hrapp/src/assets"],
+
+            "styles": ["apps/hrapp/src/styles.css", "./node_modules/bootstrap/dist/css/bootstrap.css" ],
+            "scripts": ["./node_modules/jquery/dist/jquery.js", "./node_modules/bootstrap/dist/js/bootstrap.js"]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/hrapp/src/environments/environment.ts",
+                  "with": "apps/hrapp/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "hrapp:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "hrapp:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "hrapp:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/hrapp/src/**/*.ts",
+              "apps/hrapp/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/hrapp"],
+          "options": {
+            "jestConfig": "apps/hrapp/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "hrapp-e2e": {
+      "root": "apps/hrapp-e2e",
+      "sourceRoot": "apps/hrapp-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/hrapp-e2e/cypress.json",
+            "tsConfig": "apps/hrapp-e2e/tsconfig.e2e.json",
+            "devServerTarget": "hrapp:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "hrapp:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/hrapp-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}

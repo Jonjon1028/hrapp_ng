@@ -1,0 +1,89 @@
+<header class="flex">
+  <img
+    alt="Nx logo"
+    width="75"
+    src="https://nx.dev/assets/images/nx-logo-white.svg"
+  />
+  <h1>Welcome to {{ title }}!</h1>
+</header><br>
+<div>
+  <app-alert></app-alert>
+  <div>
+    <form [formGroup]="postUserForm" novalidate>
+      <fieldset>
+        <legend class="text-primary"> New User</legend>
+        <div class="form-group">
+          <input class="form-control" placeholder="firstname" formControlName="firstName">
+          <div *ngIf="uForm.firstName.touched && uForm.firstName.invalid" class="alert alert-danger">
+            Firstname is required
+          </div>
+        </div>
+        <div class="form-group">
+          <input class="form-control" placeholder="lastname" formControlName="lastName">
+          <div *ngIf="uForm.lastName.touched && uForm.lastName.invalid" class="alert alert-danger">
+            Lastname is required
+          </div>
+        </div>
+        <div class="form-group">
+          <input class="form-control" placeholder="address" formControlName="address">
+          <div *ngIf="uForm.address.touched && uForm.address.invalid" class="alert alert-danger">
+            Address is required
+          </div>
+        </div>
+        <div class="form-group">
+          <input class="form-control" placeholder="mobile number (10 digit format)" formControlName="mobilePhone">
+          <div *ngIf="uForm.mobilePhone.touched && uForm.mobilePhone.invalid" class="alert alert-danger">
+            Mobile is required
+          </div>
+        </div>
+        <div class="form-group">
+          <input class="form-control" placeholder="email" formControlName="email">
+          <div *ngIf="uForm.email.touched && uForm.email.invalid" class="alert alert-danger">
+            email is required
+          </div>
+        </div>
+        <br>
+        <div>
+          <button class="btn btn-primary btn-md" *ngIf="!toggleBtn" [disabled]="postUserForm.invalid"
+            (click)="postUser()">Post</button>
+          <div *ngIf="toggleBtn">
+            <button type="submit" [disabled]="postUserForm.invalid" (click)="updateUser()"
+              class="btn btn-primary">Update</button>
+            <span> | </span>
+            <button type="submit" (click)="resetUserForm()" class="btn btn-primary">New</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
+<br><br>
+<div>
+  <fieldset>
+    <legend class="text-primary">User List</legend>
+    <table class="table table-hover">
+      <thead>
+        <tr class="table-primary">
+          <th>Firstname</th>
+          <th>Lastname</th>
+          <th>Address</th>
+          <th>Mobile</th>
+          <th>Email</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="users.length>0">
+        <tr *ngFor="let user of users">
+          <td>{{user.firstName}}</td>
+          <td>{{user.lastName}}</td>
+          <td>{{user.address}}</td>
+          <td>{{user.mobilePhone}}</td>
+          <td>{{user.email}}</td>
+          <td>
+            <span style="cursor:pointer;text-decoration:underline;color:orange;" (click)="editUser(user)">Edit</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <div *ngIf="users.length == 0">No available users list.</div>
